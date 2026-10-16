@@ -1,0 +1,19 @@
+<a class="skip-link" href="#main-content">ข้ามไปยังเนื้อหาหลัก</a>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/" aria-label="Piping Integrity home">
+      <span class="brand-mark" aria-hidden="true">PI</span>
+      <span><strong>Piping Integrity</strong><small>Thickness monitoring</small></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+        >Piping lines</a
+      >
+    </nav>
+    <span class="environment"><span class="status-dot"></span> Local workspace</span>
+  </header>
+  <main id="main-content" class="page-content" tabindex="-1"><router-outlet /></main>
+  <footer class="footer">
+    Piping Integrity <span>Inspection records and thickness history</span>
+  </footer>
+</div>

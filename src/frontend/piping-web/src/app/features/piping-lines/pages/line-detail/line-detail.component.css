@@ -1,0 +1,14 @@
+.crumbs {
+  display: flex;
+  min-height: var(--size-control);
+  align-items: center;
+  gap: var(--space-xs);
+  margin-block-end: var(--space-xl);
+  color: var(--color-steel);
+  font-size: var(--font-size-body-sm);
+}
+
+.crumbs a {
+  min-height: var(--size-control);
+  color: var(--color-steel);
+}

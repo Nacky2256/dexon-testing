@@ -1,0 +1,123 @@
+<section class="page-heading">
+  <div>
+    <div class="eyebrow">ASSET REGISTER <span>·</span> PIPING</div>
+    <h1>Piping lines</h1>
+    <p class="lede">ค้นหาและจัดการข้อมูลท่อ พร้อมเปิดดูประวัติการตรวจวัดความหนา</p>
+  </div>
+  <button class="button primary" type="button" (click)="create()">เพิ่ม Piping line</button>
+</section>
+
+@if (errorMessage()) {
+  <div class="alert error" role="alert">
+    <span class="alert-label">เกิดข้อผิดพลาด:</span> {{ errorMessage() }}
+  </div>
+}
+
+<app-line-form-dialog
+  [draft]="draft()"
+  [editing]="editingId() !== null"
+  [saving]="saving()"
+  [errorMessage]="errorMessage()"
+  (draftChange)="setDraft($event)"
+  (saveRequested)="save()"
+  (closed)="onLineFormClosed()"
+/>
+
+<section class="card list-card">
+  <div class="list-toolbar">
+    <div>
+      <h2>Registered lines</h2>
+      <p>{{ lines().length }} รายการในทะเบียน</p>
+    </div>
+    <label class="search-box"
+      ><svg class="search-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+        <circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8" />
+        <path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.8" />
+      </svg>
+      ><input
+        aria-label="ค้นหา Line Number หรือข้อมูลท่อ"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        placeholder="ค้นหา line, location, service"
+    /></label>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state"><span class="spinner"></span> กำลังโหลดข้อมูล</div>
+  } @else if (filteredLines().length === 0) {
+    <div class="empty-state">
+      <h3>{{ search() ? 'ไม่พบรายการที่ค้นหา' : 'ยังไม่มี Piping line' }}</h3>
+      <p>
+        {{
+          search()
+            ? 'ลองใช้คำค้นอื่น'
+            : 'เพิ่มข้อมูลท่อรายการแรกเพื่อเริ่มบันทึกจุดตรวจและประวัติความหนา'
+        }}
+      </p>
+      @if (!search()) {
+        <button class="button primary" type="button" (click)="create()">เพิ่ม Piping line</button>
+      }
+    </div>
+  } @else {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Line number</th>
+            <th scope="col">Location</th>
+            <th class="route-column" scope="col">From</th>
+            <th class="route-column" scope="col">To</th>
+            <th scope="col">Pipe size (inch)</th>
+            <th scope="col">Service</th>
+            <th scope="col">Materal</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (line of filteredLines(); track line.id) {
+            <tr>
+              <td>
+                <a class="line-link" [routerLink]="['/lines', line.id]">{{ line.lineNumber }}</a>
+              </td>
+              <td>{{ line.location || '—' }}</td>
+              <td>
+                <span class="route-endpoint" [attr.title]="line.fromDescription || '—'">{{
+                  line.fromDescription || '—'
+                }}</span>
+              </td>
+              <td>
+                <span class="route-endpoint" [attr.title]="line.toDescription || '—'">{{
+                  line.toDescription || '—'
+                }}</span>
+              </td>
+              <td>{{ line.pipeSizeInch ?? '—' }} <span class="unit">in</span></td>
+              <td>
+                <span class="service-chip">{{ line.service || 'Unspecified' }}</span>
+              </td>
+
+              <td>
+                <span class="service-chip">{{ line.material || 'Unspecified' }}</span>
+              </td>
+              <td>
+                <div class="row-actions">
+                  <button class="text-action" type="button" (click)="openInfo(line)">Info</button>
+                  <a class="text-action" [routerLink]="['/lines', line.id]">Detail</a>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
+
+<app-line-info-dialog
+  [line]="selectedLine()"
+  [loading]="infoLoading()"
+  [errorMessage]="infoError()"
+  [deleting]="deleting()"
+  (closed)="onInfoClosed()"
+  (editLine)="editSelectedLine($event)"
+  (deleteLine)="removeSelectedLine()"
+/>

@@ -1,0 +1,109 @@
+<dialog #dialog class="info-dialog" aria-labelledby="line-info-title" (close)="onClose()">
+  <div class="info-dialog-heading">
+    <div>
+      <div class="eyebrow">PIPING INFORMATION</div>
+      @if (line; as detail) {
+        <h2 id="line-info-title">{{ detail.lineNumber }}</h2>
+      } @else {
+        <h2 id="line-info-title">ข้อมูล Piping line</h2>
+      }
+    </div>
+    <button class="icon-button" type="button" aria-label="ปิดรายละเอียด" (click)="close()">
+      ปิด
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state"><span class="spinner"></span> กำลังโหลดรายละเอียด</div>
+  }
+  @if (errorMessage) {
+    <div class="alert error" role="alert">
+      <span class="alert-label">เกิดข้อผิดพลาด:</span> {{ errorMessage }}
+    </div>
+  }
+  @if (line; as detail) {
+    <div class="info-summary">
+      <span class="service-chip">{{ detail.service || 'Unspecified' }}</span>
+      <span>{{ detail.location || 'ไม่ระบุ Location' }}</span>
+    </div>
+    <dl class="info-grid">
+      <div>
+        <dt>From</dt>
+        <dd>{{ detail.fromDescription || '—' }}</dd>
+      </div>
+      <div>
+        <dt>To</dt>
+        <dd>{{ detail.toDescription || '—' }}</dd>
+      </div>
+      <div>
+        <dt>Pipe size</dt>
+        <dd>{{ detail.pipeSizeInch ?? '—' }} <span class="unit">inch</span></dd>
+      </div>
+      <div>
+        <dt>Original thickness</dt>
+        <dd>{{ detail.originalThicknessMm ?? '—' }} <span class="unit">mm</span></dd>
+      </div>
+      <div>
+        <dt>Material</dt>
+        <dd>{{ detail.material || '—' }}</dd>
+      </div>
+      <div>
+        <dt>Drawing number</dt>
+        <dd>{{ detail.drawingNumber || '—' }}</dd>
+      </div>
+      <div>
+        <dt>In-service date</dt>
+        <dd>{{ detail.inserviceDate || '—' }}</dd>
+      </div>
+      <div>
+        <dt>Corrosion allowance</dt>
+        <dd>{{ detail.corrosionAllowanceMm ?? '—' }} <span class="unit">mm</span></dd>
+      </div>
+      <div>
+        <dt>Design life</dt>
+        <dd>{{ detail.designLife ?? '—' }} <span class="unit">years</span></dd>
+      </div>
+      <div>
+        <dt>Stress</dt>
+        <dd>{{ detail.stress ?? '—' }}</dd>
+      </div>
+      <div>
+        <dt>Joint efficiency</dt>
+        <dd>{{ detail.jointEfficiency ?? '—' }}</dd>
+      </div>
+      <div>
+        <dt>Design pressure</dt>
+        <dd>{{ detail.designPressure ?? '—' }}</dd>
+      </div>
+      <div>
+        <dt>Operating pressure</dt>
+        <dd>{{ detail.operatingPressure ?? '—' }}</dd>
+      </div>
+      <div>
+        <dt>Design temperature</dt>
+        <dd>{{ detail.designTemperature ?? '—' }}</dd>
+      </div>
+      <div>
+        <dt>Operating temperature</dt>
+        <dd>{{ detail.operatingTemperature ?? '—' }}</dd>
+      </div>
+      <div>
+        <dt>CML points</dt>
+        <dd>{{ detail.cmls.length }}</dd>
+      </div>
+      <div>
+        <dt>Test points</dt>
+        <dd>{{ testPointCount(detail) }}</dd>
+      </div>
+    </dl>
+    <div class="info-dialog-actions">
+      <button class="button secondary" type="button" (click)="close()">ปิด</button>
+      <button class="button secondary" type="button" [disabled]="deleting" (click)="requestEdit()">
+        แก้ไข
+      </button>
+      <button class="button danger" type="button" [disabled]="deleting" (click)="requestDelete()">
+        {{ deleting ? 'กำลังลบ…' : 'ลบ' }}
+      </button>
+    </div>
+  }
+</dialog>

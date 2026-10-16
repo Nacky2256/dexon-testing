@@ -1,0 +1,16 @@
+<label>
+  <span>
+    {{ label() }}
+    @if (required()) {
+      <span class="required" aria-hidden="true">*</span>
+    }
+  </span>
+  <input
+    type="date"
+    [required]="required()"
+    [value]="value()"
+    [disabled]="disabled()"
+    (input)="handleInput($event)"
+    (blur)="handleBlur()"
+  />
+</label>

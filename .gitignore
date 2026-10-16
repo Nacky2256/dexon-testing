@@ -1,0 +1,31 @@
+# .NET build output
+**/bin/
+**/obj/
+
+# Angular dependencies and output
+**/node_modules/
+**/dist/
+**/.angular/
+
+# Local database files
+*.db
+*.db-shm
+*.db-wal
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+
+# OS/editor files
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+
+.agents
+inital-requirements
+AGENTS.md
+designs.md
+requirements.md
+tasks.md

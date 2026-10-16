@@ -1,0 +1,8 @@
+@Piping.Api_HostAddress = http://localhost:5080
+
+GET {{Piping.Api_HostAddress}}/api/health
+Accept: application/json
+
+### List piping lines
+GET {{Piping.Api_HostAddress}}/api/piping-lines
+Accept: application/json

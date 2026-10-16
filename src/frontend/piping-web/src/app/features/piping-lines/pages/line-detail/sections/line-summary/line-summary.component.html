@@ -1,0 +1,23 @@
+<section class="summary-grid card">
+  <div>
+    <span class="summary-label">FROM</span><strong>{{ line.fromDescription || '—' }}</strong>
+  </div>
+  <div>
+    <span class="summary-label">TO</span><strong>{{ line.toDescription || '—' }}</strong>
+  </div>
+  <div>
+    <span class="summary-label">PIPE SIZE</span
+    ><strong>{{ line.pipeSizeInch ?? '—' }} <small>inch</small></strong>
+  </div>
+  <div>
+    <span class="summary-label">ORIGINAL THICKNESS</span
+    ><strong>{{ line.originalThicknessMm ?? '—' }} <small>mm</small></strong>
+  </div>
+  <div>
+    <span class="summary-label">IN SERVICE</span><strong>{{ line.inserviceDate || '—' }}</strong>
+  </div>
+  <div>
+    <span class="summary-label">DRAWING NUMBER</span
+    ><strong>{{ line.drawingNumber || '—' }}</strong>
+  </div>
+</section>

@@ -1,0 +1,64 @@
+<section class="section-block child-section">
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow">CML {{ cmlNumber }} <span>·</span> MEASUREMENT POSITIONS</div>
+      <h2>
+        Test points <span class="count">{{ testPoints.length }}</span>
+      </h2>
+      <p>ตัวอย่างใช้ตำแหน่งรอบท่อ 0°, 90°, 180° และ 270°</p>
+    </div>
+    <button class="button primary" type="button" (click)="add.emit()">เพิ่ม Test Point</button>
+  </div>
+
+  @if (testPoints.length === 0) {
+    <div class="empty-panel">
+      <strong>ยังไม่มี Test Point</strong><span>เพิ่มตำแหน่งรอบท่อที่ต้องการตรวจวัด</span>
+    </div>
+  } @else {
+    <div class="table-card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">TP</th>
+              <th scope="col">ตำแหน่ง</th>
+              <th scope="col">Note</th>
+              <th scope="col">Readings</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (point of testPoints; track point.id) {
+              <tr [class.active-row]="selectedTestPointId === point.id" (click)="select.emit(point)" class="tp-tr">
+                <td>
+                  <button class="tp-select" type="button">
+                    TP {{ point.tpNumber }}
+                  </button>
+                </td>
+                <td>
+                  <span class="angle-pill">{{ point.tpDescription }}°</span>
+                </td>
+                <td>{{ point.note || '—' }}</td>
+                <td>{{ point.readings.length }}</td>
+                <td>
+                  <div class="row-actions">
+                    <button class="text-action" type="button" (click)="edit.emit(point)">
+                      แก้ไข
+                    </button>
+                    <button
+                      class="text-action danger-text"
+                      type="button"
+                      (click)="remove.emit(point)"
+                    >
+                      ลบ
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</section>

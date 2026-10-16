@@ -1,0 +1,57 @@
+<section class="section-block readings-section">
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow">TP {{ testPointNumber }} <span>·</span> THICKNESS HISTORY</div>
+      <h2>
+        Thickness readings <span class="count">{{ readings.length }}</span>
+      </h2>
+      <p>เก็บผลตรวจแต่ละครั้งตามวันที่ตรวจ เพื่อดูแนวโน้มความหนา</p>
+    </div>
+    <button class="button primary" type="button" (click)="add.emit()">เพิ่มผลตรวจ</button>
+  </div>
+
+  @if (readings.length === 0) {
+    <div class="empty-panel">
+      <strong>ยังไม่มี Thickness reading</strong><span>เพิ่มผลตรวจแรกของ Test Point นี้</span>
+    </div>
+  } @else {
+    <div class="table-card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Inspection date</th>
+              <th scope="col">Actual thickness</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (reading of readings; track reading.id) {
+              <tr style="cursor: pointer;">
+                <td>{{ reading.inspectionDate }}</td>
+                <td>
+                  <strong class="reading-value">{{ reading.actualThicknessMm }}</strong>
+                  <span class="unit">mm</span>
+                </td>
+                <td>
+                  <div class="row-actions" (click)="edit.emit(reading)">
+                    <button class="text-action" type="button" >
+                      แก้ไข
+                    </button>
+                    <button
+                      class="text-action danger-text"
+                      type="button"
+                      (click)="remove.emit(reading)"
+                    >
+                      ลบ
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</section>

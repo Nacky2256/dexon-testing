@@ -1,0 +1,174 @@
+<div class="crumbs">
+  <a routerLink="/">Piping lines</a><span>/</span><span>{{ line()?.lineNumber || 'Detail' }}</span>
+</div>
+
+@if (loading()) {
+  <div class="loading-state"><span class="spinner"></span> กำลังโหลดรายละเอียด</div>
+}
+@if (errorMessage()) {
+  <div class="alert error" role="alert">
+    <span class="alert-label">เกิดข้อผิดพลาด:</span> {{ errorMessage() }}
+  </div>
+}
+
+@if (line(); as lineData) {
+  <app-line-header [line]="lineData" (back)="back()" />
+  <app-line-summary [line]="lineData" />
+  <app-cml-section
+    [cmls]="lineData.cmls"
+    [selectedCmlId]="selectedCmlId()"
+    (add)="addCml(cmlDialog)"
+    (select)="selectCml($event)"
+    (edit)="editCml($event, cmlDialog)"
+    (remove)="deleteCml($event)"
+  />
+
+  @if (selectedCml(); as selectedCmlData) {
+    <app-test-point-section
+      [cmlNumber]="selectedCmlData.cmlNumber"
+      [testPoints]="selectedCmlData.testPoints"
+      [selectedTestPointId]="selectedTestPointId()"
+      (add)="addTestPoint(tpDialog)"
+      (select)="selectTestPoint($event)"
+      (edit)="editTestPoint($event, tpDialog)"
+      (remove)="deleteTestPoint($event)"
+    />
+  }
+
+  @if (selectedTestPoint(); as selectedTestPointData) {
+    <app-reading-section
+      [testPointNumber]="selectedTestPointData.tpNumber"
+      [readings]="selectedTestPointData.readings"
+      (add)="addReading(readingDialog)"
+      (edit)="editReading($event, readingDialog)"
+      (remove)="deleteReading($event)"
+    />
+  }
+
+  <dialog #cmlDialog class="editor-dialog" aria-labelledby="cml-dialog-title">
+    <form class="editor-card" #cmlFormRef="ngForm" (ngSubmit)="saveCml(cmlDialog)">
+      <h3 id="cml-dialog-title">{{ editingCmlId() !== null ? 'แก้ไข CML' : 'เพิ่ม CML' }}</h3>
+      <div class="form-row">
+        <app-number-field
+          label="CML number"
+          name="cmlNumber"
+          min="1"
+          required
+          [ngModel]="cmlDraft().cmlNumber"
+          (ngModelChange)="updateCmlDraft('cmlNumber', $event)"
+        />
+        <app-text-field
+          label="Description"
+          name="description"
+          maxlength="200"
+          required
+          placeholder="เช่น Pipe, Elbow i"
+          [ngModel]="cmlDraft().description"
+          (ngModelChange)="updateCmlDraft('description', $event)"
+        />
+      </div>
+      @if (errorMessage()) {
+        <div class="alert error" role="alert">
+          <span class="alert-label">เกิดข้อผิดพลาด:</span> {{ errorMessage() }}
+        </div>
+      }
+      <div class="form-actions">
+        <button class="button secondary" type="button" (click)="cancelForms(cmlDialog)">
+          ยกเลิก
+        </button>
+        <button class="button primary" type="submit" [disabled]="cmlFormRef.invalid || saving()">
+          บันทึก CML
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog #tpDialog class="editor-dialog" aria-labelledby="tp-dialog-title">
+    <form class="editor-card" #tpFormRef="ngForm" (ngSubmit)="saveTestPoint(tpDialog)">
+      <h3 id="tp-dialog-title">
+        {{ editingTestPointId() !== null ? 'แก้ไข Test Point' : 'เพิ่ม Test Point' }}
+      </h3>
+      <div class="form-row three">
+        <app-number-field
+          label="TP number"
+          name="tpNumber"
+          min="1"
+          required
+          [ngModel]="testPointDraft().tpNumber"
+          (ngModelChange)="updateTestPointDraft('tpNumber', $event)"
+        />
+        <app-select-field
+          label="ตำแหน่งรอบท่อ (องศา)"
+          name="tpDescription"
+          required
+          [options]="testPointPositionOptions"
+          [ngModel]="testPointDraft().tpDescription"
+          (ngModelChange)="updateTestPointDraft('tpDescription', $event)"
+        />
+        <app-text-field
+          label="Note"
+          name="note"
+          maxlength="500"
+          [ngModel]="testPointDraft().note"
+          (ngModelChange)="updateTestPointDraft('note', $event)"
+        />
+      </div>
+      @if (errorMessage()) {
+        <div class="alert error" role="alert">
+          <span class="alert-label">เกิดข้อผิดพลาด:</span> {{ errorMessage() }}
+        </div>
+      }
+      <div class="form-actions">
+        <button class="button secondary" type="button" (click)="cancelForms(tpDialog)">
+          ยกเลิก
+        </button>
+        <button class="button primary" type="submit" [disabled]="tpFormRef.invalid || saving()">
+          บันทึก Test Point
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog #readingDialog class="editor-dialog" aria-labelledby="reading-dialog-title">
+    <form class="editor-card" #readingFormRef="ngForm" (ngSubmit)="saveReading(readingDialog)">
+      <h3 id="reading-dialog-title">
+        {{ editingReadingId() !== null ? 'แก้ไขผลตรวจ' : 'เพิ่มผลตรวจ' }}
+      </h3>
+      <div class="form-row">
+        <app-date-field
+          label="Inspection date"
+          name="inspectionDate"
+          required
+          [ngModel]="readingDraft().inspectionDate"
+          (ngModelChange)="updateReadingDraft('inspectionDate', $event)"
+        />
+        <app-number-field
+          label="Actual thickness"
+          unit="mm"
+          name="actualThicknessMm"
+          min="0.001"
+          required
+          [ngModel]="readingDraft().actualThicknessMm"
+          (ngModelChange)="updateReadingDraft('actualThicknessMm', $event)"
+        />
+      </div>
+      @if (errorMessage()) {
+        <div class="alert error" role="alert">
+          <span class="alert-label">เกิดข้อผิดพลาด:</span> {{ errorMessage() }}
+        </div>
+      }
+      <div class="form-actions">
+        <button class="button secondary" type="button" (click)="cancelForms(readingDialog)">
+          ยกเลิก
+        </button>
+        <button
+          class="button primary"
+          type="submit"
+          [disabled]="readingFormRef.invalid || saving()"
+        >
+          บันทึกผลตรวจ
+        </button>
+      </div>
+    </form>
+  </dialog>
+}

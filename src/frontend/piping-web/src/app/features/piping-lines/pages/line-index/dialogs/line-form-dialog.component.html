@@ -1,0 +1,179 @@
+<dialog #dialog class="editor-dialog" aria-labelledby="line-form-title" (close)="closed.emit()">
+  <section class="form-card" aria-labelledby="line-form-title">
+    <div class="form-heading">
+      <div>
+        <div class="eyebrow">PIPING INFORMATION</div>
+        <h2 id="line-form-title">
+          {{ editing ? 'แก้ไข Piping line' : 'เพิ่ม Piping line' }}
+        </h2>
+      </div>
+      <button class="icon-button" type="button" aria-label="ปิดฟอร์ม" (click)="close()">ปิด</button>
+    </div>
+    <form (ngSubmit)="onSave()" #lineForm="ngForm">
+      <div class="form-rows">
+        <div class="form-row">
+          <app-text-field
+            label="Line number"
+            name="lineNumber"
+            required
+            maxlength="100"
+            placeholder="เช่น 6-PL-J4N-01007"
+            [ngModel]="draft.lineNumber"
+            (ngModelChange)="updateDraft('lineNumber', $event)"
+          />
+          <app-text-field
+            label="Location"
+            name="location"
+            maxlength="200"
+            [ngModel]="draft.location"
+            (ngModelChange)="updateDraft('location', $event)"
+          />
+        </div>
+        <div class="form-row">
+          <app-text-field
+            label="From"
+            name="fromDescription"
+            maxlength="500"
+            [ngModel]="draft.fromDescription"
+            (ngModelChange)="updateDraft('fromDescription', $event)"
+          />
+          <app-text-field
+            label="To"
+            name="toDescription"
+            maxlength="500"
+            [ngModel]="draft.toDescription"
+            (ngModelChange)="updateDraft('toDescription', $event)"
+          />
+        </div>
+        <div class="form-row">
+          <app-text-field
+            label="Drawing number"
+            name="drawingNumber"
+            maxlength="200"
+            [ngModel]="draft.drawingNumber"
+            (ngModelChange)="updateDraft('drawingNumber', $event)"
+          />
+          <app-text-field
+            label="Service"
+            name="service"
+            maxlength="100"
+            [ngModel]="draft.service"
+            (ngModelChange)="updateDraft('service', $event)"
+          />
+        </div>
+        <div class="form-row">
+          <app-text-field
+            label="Material"
+            name="material"
+            maxlength="200"
+            [ngModel]="draft.material"
+            (ngModelChange)="updateDraft('material', $event)"
+          />
+          <app-date-field
+            label="In-service date"
+            name="inserviceDate"
+            [ngModel]="draft.inserviceDate"
+            (ngModelChange)="updateDraft('inserviceDate', $event)"
+          />
+        </div>
+        <div class="form-row">
+          <app-number-field
+            label="Pipe size"
+            unit="inch"
+            name="pipeSizeInch"
+            required
+            min="0.001"
+            [ngModel]="draft.pipeSizeInch"
+            (ngModelChange)="updateDraft('pipeSizeInch', $event)"
+          />
+          <app-number-field
+            label="Original thickness"
+            unit="mm"
+            name="originalThicknessMm"
+            min="0"
+            [ngModel]="draft.originalThicknessMm"
+            (ngModelChange)="updateDraft('originalThicknessMm', $event)"
+          />
+        </div>
+      </div>
+      <details class="advanced-fields" open>
+        <summary>Design and operating conditions</summary>
+        <div class="form-rows">
+          <div class="form-row">
+            <app-number-field
+              label="Stress"
+              name="stress"
+              [ngModel]="draft.stress"
+              (ngModelChange)="updateDraft('stress', $event)"
+            />
+            <app-number-field
+              label="Joint efficiency"
+              name="jointEfficiency"
+              min="0"
+              max="1"
+              [ngModel]="draft.jointEfficiency"
+              (ngModelChange)="updateDraft('jointEfficiency', $event)"
+            />
+          </div>
+          <div class="form-row">
+            <app-number-field
+              label="CA"
+              unit="mm"
+              name="corrosionAllowanceMm"
+              min="0"
+              [ngModel]="draft.corrosionAllowanceMm"
+              (ngModelChange)="updateDraft('corrosionAllowanceMm', $event)"
+            />
+            <app-number-field
+              label="Design life"
+              unit="years"
+              name="designLife"
+              min="0"
+              [ngModel]="draft.designLife"
+              (ngModelChange)="updateDraft('designLife', $event)"
+            />
+          </div>
+          <div class="form-row">
+            <app-number-field
+              label="Design pressure"
+              name="designPressure"
+              [ngModel]="draft.designPressure"
+              (ngModelChange)="updateDraft('designPressure', $event)"
+            />
+            <app-number-field
+              label="Operating pressure"
+              name="operatingPressure"
+              [ngModel]="draft.operatingPressure"
+              (ngModelChange)="updateDraft('operatingPressure', $event)"
+            />
+          </div>
+          <div class="form-row">
+            <app-number-field
+              label="Design temperature"
+              name="designTemperature"
+              [ngModel]="draft.designTemperature"
+              (ngModelChange)="updateDraft('designTemperature', $event)"
+            />
+            <app-number-field
+              label="Operating temperature"
+              name="operatingTemperature"
+              [ngModel]="draft.operatingTemperature"
+              (ngModelChange)="updateDraft('operatingTemperature', $event)"
+            />
+          </div>
+        </div>
+      </details>
+      @if (errorMessage) {
+        <div class="alert error" role="alert">
+          <span class="alert-label">เกิดข้อผิดพลาด:</span> {{ errorMessage }}
+        </div>
+      }
+      <div class="form-actions">
+        <button class="button secondary" type="button" (click)="close()">ยกเลิก</button>
+        <button class="button primary" type="submit" [disabled]="lineForm.invalid || saving">
+          {{ saving ? 'กำลังบันทึก…' : 'บันทึกข้อมูล' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</dialog>

@@ -1,0 +1,22 @@
+<label>
+  <span>
+    {{ label() }}
+    @if (unit()) {
+      <span class="unit">{{ unit() }}</span>
+    }
+    @if (required()) {
+      <span class="required" aria-hidden="true">*</span>
+    }
+  </span>
+  <input
+    type="number"
+    [required]="required()"
+    [attr.min]="min()"
+    [attr.max]="max()"
+    [attr.step]="step()"
+    [value]="value() ?? ''"
+    [disabled]="disabled()"
+    (input)="handleInput($event)"
+    (blur)="handleBlur()"
+  />
+</label>

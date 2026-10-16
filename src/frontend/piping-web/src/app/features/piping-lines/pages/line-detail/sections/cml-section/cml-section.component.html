@@ -1,0 +1,92 @@
+<section class="section-block">
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow">INSPECTION LOCATIONS</div>
+      <h2>
+        CML points <span class="count">{{ cmls.length }}</span>
+      </h2>
+      <p>จุดตรวจวัดความหนาที่กำหนดสำหรับ Piping line นี้</p>
+    </div>
+    <button class="button primary" type="button" (click)="add.emit()">เพิ่ม CML</button>
+  </div>
+
+  @if (cmls.length === 0) {
+    <div class="empty-panel">
+      <strong>ยังไม่มี CML</strong><span>เพิ่มจุดตรวจเพื่อเริ่มบันทึก Test Point</span>
+    </div>
+  } @else {
+    <div class="table-card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">CML Number</th>
+              <th scope="col">CML Description</th>
+              <th scope="col">Actual outside diameter</th>
+              <th scope="col">Design thickness (mm)</th>
+              <th scope="col">Structural thickness (mm)</th>
+              <th scope="col">Required thickness (mm)</th>
+              <th scope="col">Test points</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (cml of cmls; track cml.id) {
+              <tr [class.active-row]="selectedCmlId === cml.id" (click)="select.emit(cml)" class="cml-tr">
+                <td>
+                  <button
+                    class="cml-select"
+                    type="button"
+                    [attr.aria-pressed]="selectedCmlId === cml.id"
+                  >
+                    CML {{ cml.cmlNumber }}
+                  </button>
+                </td>
+                <td>{{ cml.description }}</td>
+                <td>
+                  {{ cml.actualOutsideDiameterMm ?? 'ไม่อยู่ในตาราง' }}
+                  @if (cml.actualOutsideDiameterMm !== null) {
+                    <span class="unit">mm</span>
+                  }
+                </td>
+                <td>
+                  {{ cml.designThicknessMm ?? 'รอยืนยันสูตร' }}
+                  @if (cml.designThicknessMm !== null) {
+                    <span class="unit">mm</span>
+                  }
+                </td>
+                <td>
+                  {{ cml.structuralThicknessMm ?? 'ไม่อยู่ในช่วง' }}
+                  @if (cml.structuralThicknessMm !== null) {
+                    <span class="unit">mm</span>
+                  }
+                </td>
+                <td>
+                  {{ cml.requiredThicknessMm ?? 'รอยืนยันสูตร' }}
+                  @if (cml.requiredThicknessMm !== null) {
+                    <span class="unit">mm</span>
+                  }
+                </td>
+                <td>{{ cml.testPoints.length }}</td>
+                <td>
+                  <div class="row-actions">
+                    <button class="text-action" type="button" (click)="edit.emit(cml)">
+                      แก้ไข
+                    </button>
+                    <button
+                      class="text-action danger-text"
+                      type="button"
+                      (click)="remove.emit(cml)"
+                    >
+                      ลบ
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</section>

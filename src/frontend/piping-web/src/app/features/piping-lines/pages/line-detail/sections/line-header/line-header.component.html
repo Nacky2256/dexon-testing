@@ -1,0 +1,14 @@
+<section class="detail-hero">
+  <div>
+    <div class="eyebrow">PIPING LINE <span>·</span> ASSET DETAIL</div>
+    <div class="title-row">
+      <h1>{{ line.lineNumber }}</h1>
+      <span class="service-chip">{{ line.service || 'Unspecified service' }}</span>
+    </div>
+    <p class="lede">
+      {{ line.location || 'ไม่ระบุ Location' }} <span class="separator">·</span>
+      {{ line.material || 'ไม่ระบุ Material' }}
+    </p>
+  </div>
+  <button class="button secondary" type="button" (click)="back.emit()">กลับหน้ารายการ</button>
+</section>

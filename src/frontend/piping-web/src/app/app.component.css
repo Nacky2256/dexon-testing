@@ -1,0 +1,208 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.skip-link {
+  position: absolute;
+  z-index: 20;
+  inset-block-start: calc(-1 * var(--size-control));
+  inset-inline-start: var(--space-base);
+  display: inline-flex;
+  min-height: var(--size-control);
+  align-items: center;
+  border-radius: var(--radius-full);
+  padding-inline: var(--space-base);
+  color: var(--color-canvas);
+  background: var(--color-ink-button);
+  font-size: var(--font-size-body-sm);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  inset-block-start: var(--space-xs);
+}
+
+.topbar {
+  position: sticky;
+  z-index: 10;
+  inset-block-start: 0;
+  display: flex;
+  min-height: var(--size-header);
+  align-items: center;
+  gap: var(--space-xxxl);
+  border-block-end: var(--border-default);
+  padding-inline: max(var(--space-xl), calc((100vw - var(--layout-content)) / 2));
+  background: var(--color-canvas);
+}
+
+.brand {
+  display: flex;
+  min-width: var(--size-brand-minimum);
+  align-items: center;
+  gap: var(--space-md);
+  color: var(--color-ink-deep);
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: var(--size-icon);
+  height: var(--size-icon);
+  flex: 0 0 var(--size-icon);
+  place-items: center;
+  border-radius: var(--radius-xl);
+  color: var(--color-canvas);
+  background: var(--color-ink-deep);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+}
+
+.brand strong,
+.brand small {
+  display: block;
+}
+
+.brand strong {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.brand small {
+  margin-block-start: var(--space-xxs);
+  color: var(--color-steel);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+nav {
+  display: flex;
+  min-height: var(--size-header);
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+nav a {
+  display: inline-flex;
+  min-height: var(--size-control);
+  align-items: center;
+  border: var(--border-width) solid var(--color-hairline);
+  border-radius: var(--radius-full);
+  padding-inline: var(--space-base);
+  color: var(--color-ink);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+
+nav a:hover {
+  border-color: var(--color-ink-deep);
+}
+
+nav a.active {
+  border-color: var(--color-ink-deep);
+  color: var(--color-canvas);
+  background: var(--color-ink-deep);
+}
+
+.environment {
+  display: inline-flex;
+  min-height: var(--size-control);
+  align-items: center;
+  gap: var(--space-xs);
+  margin-inline-start: auto;
+  color: var(--color-steel);
+  font-size: var(--font-size-caption);
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: var(--space-xs);
+  height: var(--space-xs);
+  border-radius: var(--radius-circle);
+  background: var(--color-success);
+}
+
+.page-content {
+  width: min(var(--layout-content), calc(100% - var(--layout-gutter) * 2));
+  flex: 1;
+  margin-inline: auto;
+  padding-block: var(--space-section-sm) var(--space-section);
+}
+
+.footer {
+  display: flex;
+  min-height: var(--size-header);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-base);
+  border-block-start: var(--border-default);
+  padding-inline: max(var(--space-xl), calc((100vw - var(--layout-content)) / 2));
+  color: var(--color-steel);
+  background: var(--color-canvas);
+  font-size: var(--font-size-caption);
+}
+
+@media (max-width: 767px) {
+  .topbar {
+    min-height: var(--size-header);
+    gap: var(--space-base);
+    padding-inline: var(--space-base);
+  }
+
+  .brand {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .page-content {
+    width: calc(100% - var(--space-xl) * 2);
+    padding-block: var(--space-xxl) var(--space-section-sm);
+  }
+
+  .footer {
+    padding-inline: var(--space-base);
+  }
+}
+
+@media (max-width: 479px) {
+  .topbar {
+    gap: var(--space-xs);
+    padding-inline: var(--space-xs);
+  }
+
+  .brand {
+    gap: var(--space-xs);
+  }
+
+  .brand-mark {
+    width: var(--space-xxxl);
+    height: var(--space-xxxl);
+    flex-basis: var(--space-xxxl);
+  }
+
+  .brand small,
+  .environment,
+  .footer span {
+    display: none;
+  }
+
+  nav a {
+    padding-inline: var(--space-md);
+    font-size: var(--font-size-caption);
+  }
+
+  .environment {
+    font-size: 0;
+  }
+}

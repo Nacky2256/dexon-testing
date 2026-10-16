@@ -1,0 +1,8 @@
+.form-heading .eyebrow {
+  margin-block-end: var(--space-xs);
+}
+
+.form-rows {
+  display: grid;
+  gap: var(--space-lg);
+}
