@@ -43,10 +43,12 @@ var databasePath = Path.Combine(builder.Environment.ContentRootPath, "piping.db"
 สำหรับ เรียกผ่าน appsetting.json
 var configuredConnection = builder.Configuration.GetConnectionString("Piping");
 
- ## Docker
+## Docker
+```bash
 docker load -i docker-images/piping-api.tar
 docker load -i docker-images/piping-web.tar
 docker compose up -d
+```
 
 ## หมายเหตุ
 - ตรวจสอบ URL ของ Backend ในการตั้งค่า Frontend
