@@ -29,7 +29,7 @@ app.UseCors("Frontend");
 app.MapControllers();
 app.MapGet("/api/health", () => Results.Ok(new { status = "ok" })).AllowAnonymous();
 
-if (app.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
+if (builder.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
 {
     await using var scope = app.Services.CreateAsyncScope();
     var db = scope.ServiceProvider.GetRequiredService<PipingDbContext>();

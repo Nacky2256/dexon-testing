@@ -11,6 +11,7 @@
 *.db
 *.db-shm
 *.db-wal
+!piping.db
 
 # Local configuration and secrets
 .env
@@ -22,6 +23,8 @@ appsettings.Local.json
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
+
+docker-images
 
 .agents
 inital-requirements

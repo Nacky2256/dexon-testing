@@ -1,0 +1,51 @@
+services:
+  backend:
+    build:
+      context: ./src/backend/Piping.Api
+      dockerfile: Dockerfile
+    image: piping-api:latest
+    container_name: piping-backend
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ASPNETCORE_URLS: http://+:8080
+      # The entrypoint resets this file from the bundled seed database on every start
+      ConnectionStrings__Piping: "Data Source=/app/data/piping.db"
+      # The seed database already contains the full schema + data, so skip auto-migration on startup
+      Database__ApplyMigrationsOnStartup: "false"
+      # Allow the frontend origin for CORS (browser hits it via the nginx host)
+      Cors__AllowedOrigins__0: "http://localhost:${FRONTEND_PORT:-4200}"
+    volumes:
+      - piping-data:/app/data
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/api/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - piping-net
+
+  frontend:
+    build:
+      context: ./src/frontend/piping-web
+      dockerfile: Dockerfile
+    image: piping-web:latest
+    container_name: piping-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-4200}:80"
+    networks:
+      - piping-net
+
+volumes:
+  piping-data:
+
+networks:
+  piping-net:
+    driver: bridge

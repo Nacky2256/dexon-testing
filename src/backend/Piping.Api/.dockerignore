@@ -1,0 +1,11 @@
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+# Allow the seed database into the image so the container can reset to a known data set on start
+!piping.seed.db
+Dockerfile
+.dockerignore
+Properties/launchSettings.json
+appsettings.Local.json
